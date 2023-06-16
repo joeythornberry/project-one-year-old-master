@@ -2,10 +2,8 @@ import win32gui
 from win32api import GetSystemMetrics
 import logging
 
-logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
-
 def get_window_dimensions_callback(handle,extras):
-    if win32gui.GetWindowText(handle).startswith("Anaconda"):
+    if win32gui.GetWindowText(handle).startswith("NoxPlayer"):
         window_rect = win32gui.GetWindowRect(handle)
         logging.debug(window_rect)
         extras["window_rect"] = window_rect

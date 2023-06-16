@@ -25,9 +25,8 @@ def mouse_location_relative_to_window_callback(handle,extras):
 
 
 def get_location_relative_to_window():
-  extras = {'name':"Windows PowerShell",'location_relative_to_window':None} 
+  extras = {'name':"NoxPlayer",'location_relative_to_window':None} 
   win32gui.EnumWindows(mouse_location_relative_to_window_callback,extras)
   return extras['location_relative_to_window']
 
 print(get_location_relative_to_window())
-
