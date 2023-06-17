@@ -23,8 +23,7 @@ def fight_battles(end_battle_queue):
         click_card['location'] = get_location.get_location_pixels(click_card['location'])
     #click_end_battle['location'] = get_location.get_location_pixels(click_end_battle['location'])
     
-    fight_battles = True
-    while fight_battles:
+    while True:
         
         for click_card in click_cards:
             pyautogui.click(click_card['location'])
