@@ -14,7 +14,7 @@ click_target = {'name':"target",'location':(0.22,0.32)}
 click_cards = [{'name':"card 1",'location':(0.29,0.92)},{'name':"card 2",'location':(0.46,0.92)},{'name':"card 3",'location':(0.64,0.92)},{'name':"card 4",'location':(0.84,0.92)}]
 #click_end_battle = {'name':"end battle button",'location':(0.50,0.88)}
 
-def fight_battles():
+def fight_battles(end_battle_queue):
     
     #click_battle['location'] = get_location.get_location_pixels(click_battle['location'])
     #click_confirm_battle['location'] = get_location.get_location_pixels(click_confirm_battle['location'])
@@ -35,6 +35,12 @@ def fight_battles():
         click_end_battle = pyautogui.locateCenterOnScreen('end_of_battle_ok.png',grayscale = True, confidence = 0.9)
         if click_end_battle != None:
             pyautogui.click(click_end_battle)
+
+            try:
+                if end_battle_queue.get_nowait() == STOP_BATTLING:
+                    break
+            except:
+                pass
             
             click_battle_location = None
             while click_battle_location == None:
@@ -49,11 +55,12 @@ def fight_battles():
             pyautogui.click(click_confirm_battle_location)
 
 def timer(end_battle_queue):
-    for i in range(100):
+    for i in range(10):
         print("foo " + str(i),flush=True)
         time.sleep(1)
+    end_battle_queue.put(STOP_BATTLING)    
         
 end_battle_queue = queue.Queue()
 timer_thread = threading.Thread(target = timer, args = (end_battle_queue, ))
 timer_thread.start()
-fight_battles()
+fight_battles(end_battle_queue)
