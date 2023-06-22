@@ -4,7 +4,7 @@ import queue
 import pyautogui
 import win32gui
 import time
-import get_location
+import locations
 
 import private
 import requests
@@ -23,12 +23,6 @@ ELIXIR_SPENT_EVERY_SECOND = 0.357
 TOKENS_FOR_SPENDING_ELIXIR = 1
 UNDERESTIMATE_FOR_SAFETY = 0.95
 
-click_battle = {'name':"battle button",'location':(0.15,0.78)}
-#click_confirm_battle = {'name':"confirm battle button",'location':(0.46,0.70)}
-click_target = {'name':"target",'location':(0.22,0.32)}
-click_cards = [{'name':"card 1",'location':(0.29,0.92)},{'name':"card 2",'location':(0.46,0.92)},{'name':"card 3",'location':(0.64,0.92)},{'name':"card 4",'location':(0.84,0.92)}]
-#click_end_battle = {'name':"end battle button",'location':(0.50,0.88)}
-
 def start_battle():
             click_battle_location = None
             while click_battle_location == None:
@@ -46,20 +40,13 @@ def start_battle():
 
 def fight_battles(end_battle_queue):
     
-    #click_battle['location'] = get_location.get_location_pixels(click_battle['location'])
-    #click_confirm_battle['location'] = get_location.get_location_pixels(click_confirm_battle['location'])
-    click_target['location'] = get_location.get_location_pixels(click_target['location'])
-    for click_card in click_cards:
-        click_card['location'] = get_location.get_location_pixels(click_card['location'])
-    #click_end_battle['location'] = get_location.get_location_pixels(click_end_battle['location'])
-    
     start_battle()
 
     while True:
         
-        for click_card in click_cards:
-            pyautogui.click(click_card['location'])
-            pyautogui.click(click_target['location'])
+        for i in range(3):
+            pyautogui.click(locations.locations["card "+str(i+1)])
+            pyautogui.click(locations.locations["target"])
             time.sleep(1)
         logging.info("fighting")
 
@@ -119,3 +106,4 @@ def fight_seasonal_battles():
     timer_thread = threading.Thread(target = timer, args = (end_battle_queue, ))
     timer_thread.start()
     fight_battles(end_battle_queue)
+

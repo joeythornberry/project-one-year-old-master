@@ -11,9 +11,11 @@ def mouse_location_relative_to_window_callback(handle,extras):
       
     screen_dimensions = win32gui.GetWindowRect(handle)
     window_rect = win32gui.GetWindowRect(handle)
+
     window_size = (window_rect[2]-window_rect[0],window_rect[3]-window_rect[1])
     logging.debug(window_rect)
-    
+    logging.debug(f"window size: {window_size}")
+
     position = pyautogui.position()
     logging.debug(position)
     
@@ -25,8 +27,10 @@ def mouse_location_relative_to_window_callback(handle,extras):
 
 
 def get_location_relative_to_window():
-  extras = {'name':"NoxPlayer",'location_relative_to_window':None} 
+  extras = {'name':"BlueStacks App Player",'location_relative_to_window':None} 
+  #extras = {'name': "NoxPlayer",'location_relative_to_window':None} 
   win32gui.EnumWindows(mouse_location_relative_to_window_callback,extras)
   return extras['location_relative_to_window']
 
-print(get_location_relative_to_window())
+print(get_location_relative_to_window())  
+
