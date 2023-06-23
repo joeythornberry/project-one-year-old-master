@@ -4,15 +4,17 @@ import queue
 import pyautogui
 import win32gui
 import time
-import locations
+from shared import locations
 
-import private
+from shared import private
 import requests
 import json
 
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+IMAGE_PATH = "shared/images/"
 
 STOP_BATTLING = "STOP_BATTLING"
 
@@ -27,13 +29,13 @@ def start_battle():
             click_battle_location = None
             while click_battle_location == None:
                 time.sleep(1)
-                click_battle_location = pyautogui.locateCenterOnScreen('seasonal_battle.png',grayscale = True, confidence = 0.9)
+                click_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'seasonal_battle.png',grayscale = True, confidence = 0.9)
             pyautogui.click(click_battle_location)
             
             click_confirm_battle_location = None
             while click_confirm_battle_location == None:
                 time.sleep(1)
-                click_confirm_battle_location = pyautogui.locateCenterOnScreen('confirm_seasonal_battle.png',grayscale = True, confidence = 0.9)
+                click_confirm_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'confirm_seasonal_battle.png',grayscale = True, confidence = 0.9)
             pyautogui.click(click_confirm_battle_location)
 
 
@@ -50,7 +52,7 @@ def fight_battles(end_battle_queue):
             time.sleep(1)
         logging.info("fighting")
 
-        click_end_battle = pyautogui.locateCenterOnScreen('end_of_battle_ok.png',grayscale = True, confidence = 0.9)
+        click_end_battle = pyautogui.locateCenterOnScreen(IMAGE_PATH+'end_of_battle_ok.png',grayscale = True, confidence = 0.9)
         if click_end_battle != None:
             pyautogui.click(click_end_battle)
 
