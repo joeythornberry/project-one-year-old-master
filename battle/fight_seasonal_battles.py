@@ -35,7 +35,7 @@ def start_battle():
             click_confirm_battle_location = None
             while click_confirm_battle_location == None:
                 time.sleep(1)
-                click_confirm_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'confirm_seasonal_battle.png',grayscale = True, confidence = 0.9)
+                click_confirm_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'confirm_seasonal_battle.png',grayscale = True, confidence = 0.8)
             pyautogui.click(click_confirm_battle_location)
 
 
