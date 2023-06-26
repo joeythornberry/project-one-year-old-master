@@ -27,7 +27,7 @@ def coerce_window_size_callback(handle,extras):
 def coerce_window_size():
     win32gui.EnumWindows(coerce_window_size_callback,None)
 
-locations = {"battle button":(0.15,0.78),"target":(0.22,0.32),"card 1":(0.29,0.92),"card 2":(0.46,0.92),"card 3":(0.64,0.92),"card 4":(0.84,0.92),"seasonal button":(0.84,0.99),"get rid of popup":(0.93,0.49),"home button":(0.47,0.99),"clan button":(0.76,0.99)}
+locations = {"battle button":(0.15,0.78),"target":(0.22,0.32),"card 1":(0.29,0.92),"card 2":(0.46,0.92),"card 3":(0.64,0.92),"card 4":(0.84,0.92),"seasonal button":(0.84,0.99),"get rid of popup":(0.93,0.49),"home button":(0.47,0.99),"clan button":(0.76,0.99),"emote button":(0.09, 0.83)}
 
 def get_window_dimensions_callback(handle,extras):
     if win32gui.GetWindowText(handle).startswith(private.emulator):
