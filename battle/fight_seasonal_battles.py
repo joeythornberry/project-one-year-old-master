@@ -109,3 +109,8 @@ def fight_seasonal_battles():
     timer_thread.start()
     fight_battles(end_battle_queue)
 
+def emote():
+    print("emote stuff goes here")
+    pyautogui.moveTo(0,0)
+    print("emoting woo")
+
