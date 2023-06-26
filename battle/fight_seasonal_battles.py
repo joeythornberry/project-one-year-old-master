@@ -110,12 +110,14 @@ def fight_seasonal_battles():
     fight_battles(end_battle_queue)
 
 def emote():
-            pyautogui.click(locations.locations["emote button"])
+
+        pyautogui.click(locations.locations["emote button"])
+        time.sleep(.5)
+        cry_button = None
+        while cry_button == None:
             time.sleep(.5)
-            cry_button = None
-            while cry_button == None:
-                time.sleep(.5)
-                cry_button = pyautogui.locateCenterOnScreen(IMAGE_PATH+'cry.png',grayscale = True, confidence = 0.6)
-            pyautogui.click(cry_button)
-            print("emoting woo")
+            cry_button = pyautogui.locateCenterOnScreen(IMAGE_PATH+'cry.png',grayscale = True, confidence = 0.6)
+        pyautogui.click(cry_button)
+        print("emoting woo")
+
 
