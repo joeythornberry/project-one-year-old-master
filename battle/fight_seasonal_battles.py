@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 IMAGE_PATH = "shared/images/"
 
 STOP_BATTLING = "STOP_BATTLING"
+EMOTE = "EMOTE"
 
 NUMBER_OF_TOWERS = 3
 TOKENS_FOR_DESTROYING_TOWER = 100
@@ -40,7 +41,7 @@ def start_battle():
 
 
 
-def fight_battles(end_battle_queue):
+def fight_battles(end_battle_queue,emote_queue):
     
     start_battle()
 
@@ -51,6 +52,13 @@ def fight_battles(end_battle_queue):
             pyautogui.click(locations.locations["target"])
             time.sleep(1)
         logging.info("fighting")
+
+        logging.info("looking for emote request")
+        try:
+            if emote_queue.get_nowait() == EMOTE:
+                emote()
+        except:
+            pass
 
         click_end_battle = pyautogui.locateCenterOnScreen(IMAGE_PATH+'end_of_battle_ok.png',grayscale = True, confidence = 0.9)
         if click_end_battle != None:
@@ -102,15 +110,29 @@ def timer(end_battle_queue):
                 break
 
         time.sleep(30)
+
+def emote_timer(emote_queue,end_battle_queue):
+    while True:
+        time.sleep(5)
+        emote_queue.put(EMOTE)
+        try:
+            if end_battle_queue.get_nowait() == STOP_BATTLING:
+                break
+        except:
+            pass
+    
         
 def fight_seasonal_battles():
     end_battle_queue = queue.Queue()
+    emote_queue = queue.Queue()
     timer_thread = threading.Thread(target = timer, args = (end_battle_queue, ))
+    emote_thread = threading.Thread(target = emote_timer, args = (emote_queue,end_battle_queue, ))
     timer_thread.start()
-    fight_battles(end_battle_queue)
+    emote_thread.start()
+    fight_battles(end_battle_queue,emote_queue)
 
 def emote():
-    print("emote stuff goes here")
-    pyautogui.moveTo(0,0)
-    print("emoting woo")
+    logging.info("emote stuff goes here")
+    pyautogui.moveTo(10,10)
+    logging.info("emoting woo")
 
