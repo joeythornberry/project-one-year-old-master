@@ -26,7 +26,7 @@ ELIXIR_SPENT_EVERY_SECOND = 0.357
 TOKENS_FOR_SPENDING_ELIXIR = 1
 UNDERESTIMATE_FOR_SAFETY = 0.95
 
-def start_battle():
+def start_seasonal_battle():
             click_battle_location = None
             while click_battle_location == None:
                 time.sleep(1)
@@ -43,11 +43,11 @@ def start_battle():
 
 def fight_battles(end_battle_queue,emote_queue):
     
-    start_battle()
+    start_seasonal_battle()
 
     while True:
         
-        for i in range(3):
+        for i in range(4):
             pyautogui.click(locations.locations["card "+str(i+1)])
             pyautogui.click(locations.locations["target"])
             time.sleep(1)
@@ -70,7 +70,7 @@ def fight_battles(end_battle_queue,emote_queue):
             except:
                 pass
 
-            start_battle()
+            start_seasonal_battle()
 
 def timer(end_battle_queue):
 
@@ -113,7 +113,7 @@ def timer(end_battle_queue):
 
 def emote_timer(emote_queue,end_battle_queue):
     while True:
-        time.sleep(5)
+        time.sleep(10)
         emote_queue.put(EMOTE)
         try:
             if end_battle_queue.get_nowait() == STOP_BATTLING:
@@ -134,11 +134,11 @@ def fight_seasonal_battles():
 def emote():
 
     pyautogui.click(locations.locations["emote button"])
-    time.sleep(.5)
+    time.sleep(.2)
     cry_button = None
     attempts = 0
     while cry_button == None and attempts < 4:
-        time.sleep(.5)
+        time.sleep(.2)
         cry_button = pyautogui.locateCenterOnScreen(IMAGE_PATH+'cry.png',grayscale = True, confidence = 0.6)
         attempts += 1
     if cry_button != None:    
