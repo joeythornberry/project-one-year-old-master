@@ -25,7 +25,7 @@ ELIXIR_SPENT_EVERY_SECOND = 0.357
 TOKENS_FOR_SPENDING_ELIXIR = 1
 UNDERESTIMATE_FOR_SAFETY = 0.95
 
-def start_battle():
+def start_seasonal_battle():
             click_battle_location = None
             while click_battle_location == None:
                 time.sleep(1)
@@ -42,7 +42,7 @@ def start_battle():
 
 def fight_battles(end_battle_queue):
     
-    start_battle()
+    start_seasonal_battle()
 
     while True:
         
@@ -62,7 +62,7 @@ def fight_battles(end_battle_queue):
             except:
                 pass
 
-            start_battle()
+            start_seasonal_battle()
 
 def timer(end_battle_queue):
 
