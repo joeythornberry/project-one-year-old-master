@@ -47,7 +47,7 @@ def fight_battles(end_battle_queue,emote_queue):
 
     while True:
         
-        for i in range(3):
+        for i in range(4):
             pyautogui.click(locations.locations["card "+str(i+1)])
             pyautogui.click(locations.locations["target"])
             time.sleep(1)
@@ -113,7 +113,7 @@ def timer(end_battle_queue):
 
 def emote_timer(emote_queue,end_battle_queue):
     while True:
-        time.sleep(5)
+        time.sleep(10)
         emote_queue.put(EMOTE)
         try:
             if end_battle_queue.get_nowait() == STOP_BATTLING:
@@ -134,11 +134,11 @@ def fight_seasonal_battles():
 def emote():
 
     pyautogui.click(locations.locations["emote button"])
-    time.sleep(.5)
+    time.sleep(.2)
     cry_button = None
     attempts = 0
     while cry_button == None and attempts < 4:
-        time.sleep(.5)
+        time.sleep(.2)
         cry_button = pyautogui.locateCenterOnScreen(IMAGE_PATH+'cry.png',grayscale = True, confidence = 0.6)
         attempts += 1
     if cry_button != None:    
