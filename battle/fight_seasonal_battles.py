@@ -36,7 +36,7 @@ def start_seasonal_battle():
             click_confirm_battle_location = None
             while click_confirm_battle_location == None:
                 time.sleep(1)
-                click_confirm_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'confirm_seasonal_battle.png',grayscale = True, confidence = 0.8)
+                click_confirm_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'confirm_seasonal_battle.png',grayscale = True, confidence = 0.7)
             pyautogui.click(click_confirm_battle_location)
 
 
@@ -60,10 +60,9 @@ def fight_battles(end_battle_queue,emote_queue):
         except:
             pass
 
-        click_end_battle = pyautogui.locateCenterOnScreen(IMAGE_PATH+'end_of_battle_ok.png',grayscale = True, confidence = 0.9)
+        click_end_battle = pyautogui.locateCenterOnScreen(IMAGE_PATH+'end_of_battle_ok.png',grayscale = True, confidence = 0.8)
         if click_end_battle != None:
             pyautogui.click(click_end_battle)
-
             try:
                 if end_battle_queue.get_nowait() == STOP_BATTLING:
                     break
