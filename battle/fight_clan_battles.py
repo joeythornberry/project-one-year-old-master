@@ -42,7 +42,7 @@ def start_clan_battle():
         confirm_battle_button = pyautogui.locateCenterOnScreen("shared/images/confirm_clan_battle.png",confidence = 0.8)
     pyautogui.click(confirm_battle_button)
 
-def timer(end_battle_queue):
+def timer(end_battle):
 
     counter = 0
     start_time = time.time()
@@ -58,10 +58,10 @@ def timer(end_battle_queue):
             last_battle_time = battle_log[0]["battleTime"]
         elif battle_log[0]["battleTime"] != last_battle_time:
             counter += 1
-            if counter >= 3:
+            if counter >= 1:
                 #sleep so we always start a new battle after end conditions are met (otherwise sometimes it does and sometimes it doesn't, as it's impossible to ensure that the api updates fast enough to stop a new battle, but sometimes it will)
                 time.sleep(10)
-                end_battle_queue.put(STOP_BATTLING)   
+                end_battle()
                 break
 
         time.sleep(30)

@@ -11,9 +11,11 @@ STOP_BATTLING = "STOP_BATTLING"
 
 IMAGE_PATH = "shared/images/"
 
-def fight_battles(end_battle_queue,emote_queue,start_new_battle):
+def fight_battles(battle_in_queue,start_new_battle):
     
     start_new_battle()
+    
+    stop_battling = False
 
     while True:
         
@@ -24,29 +26,29 @@ def fight_battles(end_battle_queue,emote_queue,start_new_battle):
         logging.info("fighting")
 
         logging.info("looking for emote request")
-        try:
-            if emote_queue.get_nowait() == EMOTE:
-                emote()
-        except:
-            pass
+        while True:
+            try:
+                message = battle_in_queue.get_nowait()
+                if message == EMOTE:
+                    emote()
+                elif message == STOP_BATTLING:
+                    stop_battling = True
+            except:
+                break
 
         click_end_battle = pyautogui.locateCenterOnScreen(IMAGE_PATH+'end_of_battle_ok.png',grayscale = True, confidence = 0.8)
         if click_end_battle != None:
             pyautogui.click(click_end_battle)
-            try:
-                if end_battle_queue.get_nowait() == STOP_BATTLING:
-                    break
-            except:
-                pass
-
+            if stop_battling:
+                break
             start_new_battle()
 
-def emote_timer(emote_queue,end_battle_queue):
+def emote_timer(battle_in_queue,emote_in_queue):
     while True:
         time.sleep(10)
-        emote_queue.put(EMOTE)
+        battle_in_queue.put(EMOTE)
         try:
-            if end_battle_queue.get_nowait() == STOP_BATTLING:
+            if emote_in_queue.get_nowait() == STOP_BATTLING:
                 break
         except:
             pass
@@ -63,13 +65,16 @@ def emote():
     if cry_button != None:    
         pyautogui.click(cry_button)
         logging.info("emoting woo")
-
-
+    
 def fight_battles_until_timer(start_new_battle,timer):
-    end_battle_queue = queue.Queue()
-    emote_queue = queue.Queue()
-    timer_thread = threading.Thread(target = timer, args = (end_battle_queue, ))
-    emote_thread = threading.Thread(target = emote_timer, args = (emote_queue,end_battle_queue, ))
+    battle_in_queue = queue.Queue()
+    emote_in_queue = queue.Queue()
+    def end_battle():
+        battle_in_queue.put(STOP_BATTLING)
+        emote_in_queue.put(STOP_BATTLING)
+        
+    timer_thread = threading.Thread(target = timer, args = (end_battle, ))
+    emote_thread = threading.Thread(target = emote_timer, args = (battle_in_queue,emote_in_queue, ))
     timer_thread.start()
     emote_thread.start()
-    fight_battles(end_battle_queue,emote_queue,start_new_battle)
+    fight_battles(battle_in_queue,start_new_battle)

@@ -39,9 +39,9 @@ def start_seasonal_battle():
                 click_confirm_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'confirm_seasonal_battle.png',grayscale = True, confidence = 0.7)
             pyautogui.click(click_confirm_battle_location)
 
-def timer(end_battle_queue):
+def timer(end_battle):
 
-    seasonal_tokens_needed = 1000
+    seasonal_tokens_needed = 10
     start_time = time.time()
 
     last_battle_time = None
@@ -73,7 +73,7 @@ def timer(end_battle_queue):
             if seasonal_tokens_needed <= 0:
                 #sleep so we always start a new battle after end conditions are met (otherwise sometimes it does and sometimes it doesn't, as it's impossible to ensure that the api updates fast enough to stop a new battle, but sometimes it will)
                 time.sleep(10)
-                end_battle_queue.put(STOP_BATTLING)   
+                end_battle()
                 break
 
         time.sleep(30)
