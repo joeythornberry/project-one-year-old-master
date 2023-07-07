@@ -11,13 +11,16 @@ STOP_BATTLING = "STOP_BATTLING"
 
 IMAGE_PATH = "shared/images/"
 
-def fight_battles(battle_in_queue,start_new_battle):
+def fight_battles(battle_in_queue,start_new_battle,end_battle):
     
-    start_new_battle()
+    started_battle_successfully = start_new_battle(end_battle)
     
     stop_battling = False
 
     while True:
+
+        if not started_battle_successfully:
+            break
         
         for i in range(4):
             pyautogui.click(locations.locations["card "+str(i+1)])
@@ -41,7 +44,7 @@ def fight_battles(battle_in_queue,start_new_battle):
             pyautogui.click(click_end_battle)
             if stop_battling:
                 break
-            start_new_battle()
+            started_battle_successfully = start_new_battle(end_battle)
 
 def emote_timer(battle_in_queue,emote_in_queue):
     while True:
@@ -69,12 +72,14 @@ def emote():
 def fight_battles_until_timer(start_new_battle,timer):
     battle_in_queue = queue.Queue()
     emote_in_queue = queue.Queue()
+    timer_in_queue = queue.Queue()
     def end_battle():
         battle_in_queue.put(STOP_BATTLING)
         emote_in_queue.put(STOP_BATTLING)
+        timer_in_queue.put(STOP_BATTLING)
         
-    timer_thread = threading.Thread(target = timer, args = (end_battle, ))
+    timer_thread = threading.Thread(target = timer, args = (timer_in_queue,end_battle, ))
     emote_thread = threading.Thread(target = emote_timer, args = (battle_in_queue,emote_in_queue, ))
     timer_thread.start()
     emote_thread.start()
-    fight_battles(battle_in_queue,start_new_battle)
+    fight_battles(battle_in_queue,start_new_battle,end_battle)

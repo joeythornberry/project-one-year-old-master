@@ -26,7 +26,7 @@ ELIXIR_SPENT_EVERY_SECOND = 0.357
 TOKENS_FOR_SPENDING_ELIXIR = 1
 UNDERESTIMATE_FOR_SAFETY = 0.95
 
-def start_clan_battle():
+def start_clan_battle(end_battle):
     print("starting battle")
     pyautogui.moveTo(locations.locations["clan drag 1"])
     pyautogui.dragTo(locations.locations["clan drag 2"][0],locations.locations["clan drag 2"][1],0.5)
@@ -41,8 +41,15 @@ def start_clan_battle():
         time.sleep(1)
         confirm_battle_button = pyautogui.locateCenterOnScreen("shared/images/confirm_clan_battle.png",confidence = 0.8)
     pyautogui.click(confirm_battle_button)
+    time.sleep(1)
+    double_battle_button = pyautogui.locateCenterOnScreen("shared/images/confirm_clan_battle.png",confidence = 0.8)
+    if double_battle_button != None:
+        end_battle()
+        return False
+    return True
+        
 
-def timer(end_battle):
+def timer(timer_in_queue,end_battle):
 
     counter = 0
     start_time = time.time()
@@ -63,5 +70,11 @@ def timer(end_battle):
                 time.sleep(10)
                 end_battle()
                 break
+        
+        try:
+            if timer_in_queue.get_nowait() == STOP_BATTLING:
+                break
+        except: 
+            pass
 
         time.sleep(30)
