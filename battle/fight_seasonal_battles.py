@@ -39,41 +39,9 @@ def start_seasonal_battle():
                 click_confirm_battle_location = pyautogui.locateCenterOnScreen(IMAGE_PATH+'confirm_seasonal_battle.png',grayscale = True, confidence = 0.7)
             pyautogui.click(click_confirm_battle_location)
 
+def timer(end_battle):
 
-
-def fight_battles(end_battle_queue,emote_queue):
-    
-    start_seasonal_battle()
-
-    while True:
-        
-        for i in range(4):
-            pyautogui.click(locations.locations["card "+str(i+1)])
-            pyautogui.click(locations.locations["target"])
-            time.sleep(1)
-        logging.info("fighting")
-
-        logging.info("looking for emote request")
-        try:
-            if emote_queue.get_nowait() == EMOTE:
-                emote()
-        except:
-            pass
-
-        click_end_battle = pyautogui.locateCenterOnScreen(IMAGE_PATH+'end_of_battle_ok.png',grayscale = True, confidence = 0.8)
-        if click_end_battle != None:
-            pyautogui.click(click_end_battle)
-            try:
-                if end_battle_queue.get_nowait() == STOP_BATTLING:
-                    break
-            except:
-                pass
-
-            start_seasonal_battle()
-
-def timer(end_battle_queue):
-
-    seasonal_tokens_needed = 1000
+    seasonal_tokens_needed = 10
     start_time = time.time()
 
     last_battle_time = None
@@ -105,44 +73,7 @@ def timer(end_battle_queue):
             if seasonal_tokens_needed <= 0:
                 #sleep so we always start a new battle after end conditions are met (otherwise sometimes it does and sometimes it doesn't, as it's impossible to ensure that the api updates fast enough to stop a new battle, but sometimes it will)
                 time.sleep(10)
-                end_battle_queue.put(STOP_BATTLING)   
+                end_battle()
                 break
 
         time.sleep(30)
-
-def emote_timer(emote_queue,end_battle_queue):
-    while True:
-        time.sleep(10)
-        emote_queue.put(EMOTE)
-        try:
-            if end_battle_queue.get_nowait() == STOP_BATTLING:
-                break
-        except:
-            pass
-    
-        
-def fight_seasonal_battles():
-    end_battle_queue = queue.Queue()
-    emote_queue = queue.Queue()
-    timer_thread = threading.Thread(target = timer, args = (end_battle_queue, ))
-    emote_thread = threading.Thread(target = emote_timer, args = (emote_queue,end_battle_queue, ))
-    timer_thread.start()
-    emote_thread.start()
-    fight_battles(end_battle_queue,emote_queue)
-
-def emote():
-
-    pyautogui.click(locations.locations["emote button"])
-    time.sleep(.2)
-    cry_button = None
-    attempts = 0
-    while cry_button == None and attempts < 4:
-        time.sleep(.2)
-        cry_button = pyautogui.locateCenterOnScreen(IMAGE_PATH+'cry.png',grayscale = True, confidence = 0.6)
-        attempts += 1
-    if cry_button != None:    
-        pyautogui.click(cry_button)
-        logging.info("emoting woo")
-
-
-
